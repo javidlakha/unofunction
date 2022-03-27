@@ -27,14 +27,16 @@ def handler(
     Handles file download, conversion and upload
 
     :param event: function invocation parameters
-    - input_bucket: the bucket from which to download the file to be converted
+    - input_bucket: the bucket from which to download the file to be converted.
+      Unofunction must have read access to this bucket
     - input_path: the path to the file to be converted in `input_bucket`
-    - output_bucket: the bucket to upload the converted file
+    - output_bucket: the bucket to upload the converted file.
+      Unofunction must have write access to this bucket
     - output_path: the path to upload the converted file in `output_bucket`
     - convert_to (optional): the file format of the converted type. Must be 
       specified if `output_path` does not have a file extension
-    - num_attempts: number of conversion attempts to make. If not specified, 
-      defaults to `DEFAULT_ATTEMPTS`
+    - num_attempts (optional): number of conversion attempts to make. If not 
+      specified, defaults to `DEFAULT_ATTEMPTS`
 
     :param context: AWS Lambda context object
     
