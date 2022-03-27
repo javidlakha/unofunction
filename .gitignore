@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# CDK output
+cdk.out/
+
+# MacOS-generated files
+.DS_Store
