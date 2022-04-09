@@ -1,0 +1,25 @@
+# Used for local testing. For an AWS SAM deployment example, see 
+# deployment-examples/sam
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: "Unofunction tests"
+Resources:
+  unofunctiontest:
+    Metadata:
+      DockerContext: ../unofunction
+      DockerTag: python3.9-v1
+      Dockerfile: Dockerfile
+    Properties:
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          S3_ENDPOINT: http://host.docker.internal:4566 # LocalStack
+      FunctionName: unofunction
+      ImageConfig:
+        Command:
+          - handler.handler
+      MemorySize: 1024
+      PackageType: Image
+      Timeout: 300
+    Type: AWS::Serverless::Function
