@@ -4,10 +4,7 @@
 # A prebuilt headless LibreOffice that has been compiled for Amazon Linux 2
 # (and is the output of this build) can be obtained from
 # https://hub.docker.com/repository/docker/unofunction/libreoffice
-# 
-# When running on ARM architectures (e.g. Apple M1 chips), run this first:
-# export DOCKER_DEFAULT_PLATFORM='linux/amd64'
-FROM amazonlinux:2 as build
+FROM --platform=linux/amd64 amazonlinux:2 as build
 
 ARG LIBREOFFICE_VERSION=7.3.2.2
 ARG DOWNLOAD_PATH=https://github.com/LibreOffice/core/archive/libreoffice-${LIBREOFFICE_VERSION}.tar.gz
