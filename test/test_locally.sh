@@ -2,8 +2,6 @@
 
 # Tests Unofunction locally by mocking out Lambda with AWS SAM and S3 with LocalStack
 #
-# Local testing is imperfect (but faster)
-#
 # Requirements: 
 # - Docker: https://docs.docker.com/get-docker/
 # - AWS SAM: https://aws.amazon.com/serverless/sam/

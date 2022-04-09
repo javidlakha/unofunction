@@ -1,8 +1,8 @@
 import logging
 import os
 import tempfile
+from typing import Optional
 
-import awslambdaric
 import boto3
 
 from convert import convert_file
@@ -10,9 +10,10 @@ from convert import convert_file
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-DEFAULT_ATTEMPTS = 3
+DEFAULT_ATTEMPTS = os.environ.get('DEFAULT_ATTEMPTS', 3)
+S3_ENDPOINT = os.environ.get('S3_ENDPOINT')  # Used to mock S3 in testing
 
-s3 = boto3.client('s3')
+s3 = boto3.client('s3', endpoint_url=S3_ENDPOINT)
 
 
 class ParameterError(Exception):
@@ -20,9 +21,9 @@ class ParameterError(Exception):
 
 
 def handler(
-        event: dict[str, str], 
-        context: awslambdaric.lambda_context.LambdaContext,
-    ) -> None:
+    event: dict[str, Optional[str]],
+    context: dict[str, Optional[str]],
+) -> None:
     """
     Handles file download, conversion and upload
 
@@ -34,12 +35,14 @@ def handler(
       Unofunction must have write access to this bucket
     - output_path: the path to upload the converted file in `output_bucket`
     - convert_to (optional): the file format of the converted type. Must be 
-      specified if `output_path` does not have a file extension
+      specified if `output_path` does not have a file extension. If 
+      `convert_to` contradicts the file format inferred from `output_path`,
+      `convert_to` takes priority
     - num_attempts (optional): number of conversion attempts to make. If not 
       specified, defaults to `DEFAULT_ATTEMPTS`
 
     :param context: AWS Lambda context object
-    
+
     :raise ParameterError: if 'convert_to' is not specified in `event` and 
     the output file format cannot be inferred from 'output_path'
     """

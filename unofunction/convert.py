@@ -20,7 +20,7 @@ def convert_file(
 ) -> None:
     """
     Calls LibreOffice to convert `filepath` to the output type specified in 
-    `convert_to`.
+    `convert_to`
 
     :param filepath: the path to the input file
     :param outdir: the path to the output directory
