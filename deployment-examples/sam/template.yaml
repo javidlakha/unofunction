@@ -1,0 +1,67 @@
+# Deploys Unofunction and creates an S3 bucket that Unofunction can read from
+# and write to
+#
+# To install the AWS SAM, see
+# https://aws.amazon.com/serverless/sam/
+#
+# To deploy this stack, run
+#    sam build
+# and then
+#    sam deploy --guided
+#
+# To tear down this stack, run
+#    sam delete
+# Note that this will fail if the S3 bucket is not first emptied
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: "Unofunction"
+Resources:
+  # Lambda
+  unofunction:
+    Metadata:
+      DockerContext: ../../unofunction
+      DockerTag: python3.9-v1
+      Dockerfile: Dockerfile
+    Properties:
+      Architectures:
+        - x86_64
+      FunctionName: unofunction
+      ImageConfig:
+        Command:
+          - handler.handler
+
+      # Must be at least 256 (megabytes). Larger instances run on faster
+      # processors and hence convert files quicker
+      MemorySize: 1024
+
+      PackageType: Image
+      Policies:
+        - S3FullAccessPolicy:
+            BucketName: !Ref storage
+
+      # It might be necessary to increase this for large files or batch
+      # conversion
+      Timeout: 300
+    Type: AWS::Serverless::Function
+
+  # S3
+  storage:
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+      # Uncomment the line below to set the bucket name. Note that
+      # bucket names must be unique across AWS' global namespace
+      # BucketName: BUCKET_NAME
+
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+    Type: AWS::S3::Bucket
+    UpdateReplacePolicy: Delete

@@ -128,8 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# CDK output
+# Local deployment settings
+deploy/
+
+# AWS-generated files
+.aws-sam
 cdk.out/
+samconfig.toml
 
 # MacOS-generated files
 .DS_Store
