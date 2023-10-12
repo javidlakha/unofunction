@@ -6,6 +6,7 @@ FROM public.ecr.aws/lambda/python:3.9
 # LibreOffice
 COPY --from=libreoffice /opt/libreoffice /opt/libreoffice
 COPY --from=libreoffice /usr/lib64 /usr/lib64
+COPY user /tmp/user
 ENV LIBREOFFICE_PATH=/opt/libreoffice/program/soffice.bin
 
 # Fonts
