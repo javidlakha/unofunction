@@ -35,7 +35,7 @@ def convert_file(
         # cannot be started. User installation could not be completed' because
         # AWS Lambda invocations do not have write access to
         # ~/.config/libreoffice
-        '-env:UserInstallation=file:///tmp/'
+        '-env:UserInstallation=file:///tmp/',
 
         '--headless',
         '--invisible',
